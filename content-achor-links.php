@@ -5,7 +5,7 @@
  * Version: 1.0
  * Description: Easily add content anchors to your pages and posts
  * Author: Roland Barker, xnau webdesign
- * Version: 1.0
+ * Version: 1.1
  * Author URI: https://xnau.com
  * License: GPL3
  * Text Domain: participants-database
@@ -13,6 +13,15 @@
  * 
  */
 
-include 'xnau_WP_Headings_IDs.php';
-add_filter( 'content_edit_pre', array('xnau_WP_Headings_IDs', 'add_heading_ids') );
-add_filter( 'wp_link_query', array('xnau_WP_Headings_IDs', 'get_content_anchors') );
+spl_autoload_register( 'xnau_content_anchor_links_autoload' );
+
+add_filter( 'content_edit_pre', array('xnau_WP_Headings_IDs', 'add_heading_ids'), 5, 2 );
+add_filter( 'wp_link_query', array('xnau_WP_Anchor_Links', 'get_content_anchors') );
+
+function xnau_content_anchor_links_autoload( $class )
+{
+  $file = $class . '.php';
+  if ( !class_exists( $class ) && is_file( trailingslashit( plugin_dir_path( __FILE__ ) ) . $file ) ) {
+    include $file;
+  }
+}
