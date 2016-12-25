@@ -8,7 +8,7 @@
  * @author     Roland Barker <webdesign@xnau.com>
  * @copyright  2016  xnau webdesign
  * @license    GPL3
- * @version    0.1
+ * @version    0.2
  * @link       http://xnau.com/wordpress-plugins/
  * @depends    
  */
@@ -48,8 +48,6 @@ class xnau_WP_Anchor_Links {
     $headings = new self();
 
     $anchor_title = __( 'Anchor' );
-
-    error_log( __METHOD__ . ' id list: ' . print_r( $headings->content_id_list, 1 ) );
 
     foreach ( $headings->content_id_list as $id => $title ) {
       $results[] = array(
