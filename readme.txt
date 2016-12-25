@@ -52,4 +52,7 @@ First, be sure there are headings in your content. The plugin creates links on H
 = 1.0 =
 initial public release
 
+= 1.1 =
+improved linker UI functionality
+
 == Upgrade Notice ==
