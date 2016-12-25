@@ -8,8 +8,8 @@
  * @author     Roland Barker <webdesign@xnau.com>
  * @copyright  2016  xnau webdesign
  * @license    GPL3
- * @version    0.1
- * @link       http://xnau.com/wordpress-plugins/
+ * @version    0.2
+ * @link       https://xnau.com/content-anchor-links/
  * @depends    
  */
 class xnau_WP_Headings_IDs {
@@ -23,18 +23,30 @@ class xnau_WP_Headings_IDs {
    * @var string the current content
    */
   private $content;
+  
+  /**
+   * @var int the current post ID
+   */
+  private $post_id;
 
   /**
    * @var int max length of the id
    */
   const id_length = 30;
+  
+  /**
+   * @var string name of the id list transient
+   */
+  const id_list_transient = 'content-anchor-links';
 
   /**
    * @param string $content the incoming content
+   * @patam int $post_id
    */
-  private function __construct( $content )
+  private function __construct( $content, $post_id )
   {
     $this->content = $content;
+    $this->post_id = $post_id;
     $this->element_id_list();
   }
 
@@ -42,47 +54,13 @@ class xnau_WP_Headings_IDs {
    * supplies the content with heading ID attributes added
    * 
    * @param string  $content
+   * @patam int $post_id
    * @return string modified content
    */
-  public static function add_heading_ids( $content )
+  public static function add_heading_ids( $content, $post_id )
   {
-    $headings = new self( $content );
+    $headings = new self( $content, $post_id );
     return $headings->add_anchors_to_headings();
-  }
-  
-  /**
-   * supplies a list of named anchors
-   * 
-   * @param string  $results
-   * @return string
-   */
-  public static function get_content_anchors ( $results )
-  {
-    $headings = new self( self::post()->post_content );
-    
-    $anchor_title = __('Anchor');
-    
-    foreach( $headings->content_id_list as $id ) {
-      $results[] = array(
-          'ID' => '',
-          'title' => $id,
-          'permalink' => '#' . $id,
-          'info' => $anchor_title,
-      );
-    }
-    return $results;
-  }
-  
-  /**
-   * gets the current post in an admin AJAX call
-   * 
-   * @return object
-   */
-  private static function post()
-  {
-    $url = parse_url( filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_STRING ) );
-    parse_str( $url['query'], $vars );
-    return get_post( $vars['post'] );
   }
 
   /**
@@ -101,6 +79,9 @@ class xnau_WP_Headings_IDs {
     // and process it through a function that replaces the title with an id 
     $content = preg_replace_callback( $pattern, array($this, 'place_ids'), $this->content );
     
+    // store the assembled ist of ids to the transient
+    $this->update_transient();
+    
     return $content;
   }
 
@@ -113,8 +94,27 @@ class xnau_WP_Headings_IDs {
   public function place_ids( $matches )
   {
     $title = $matches['heading'];
-    $slug = $this->unique_id( substr( sanitize_title_with_dashes( $title ), 0, self::id_length ) );
+    $slug = $this->unique_id( $this->make_slug( $title ) );
+    
+    // add the new slug to the id list
+    $this->add_id_to_list( $title, $slug );
+    
     return '<h2 id="' . $slug . '" ' . $matches['atts'] . '>' . $title . '</h2>';
+  }
+  
+  /**
+   * makes a slug out of a title
+   * 
+   * @param string $title the title or content of the element
+   * 
+   * @return string the derived slug
+   */
+  private function make_slug( $title )
+  {
+    if ( empty( $title ) ) {
+      $title = uniqid('anchor-');
+    }
+    return substr( sanitize_title_with_dashes( $title ), 0, self::id_length );
   }
 
   /**
@@ -133,8 +133,7 @@ class xnau_WP_Headings_IDs {
       $slug = $base_slug . '-' . $check;
       $check++;
     }
-    // add the new slug to the id list
-    $this->content_id_list[] = $slug;
+    
     return $slug;
   }
 
@@ -146,7 +145,7 @@ class xnau_WP_Headings_IDs {
    */
   private function is_not_unique( $slug )
   {
-    return in_array( $slug, $this->content_id_list );
+    return in_array( $slug, array_keys( $this->content_id_list ) );
   }
 
   /**
@@ -156,8 +155,33 @@ class xnau_WP_Headings_IDs {
    */
   private function element_id_list()
   {
-    $count = preg_match_all( '/id="(.*)"/', $this->content, $matches );
-    $this->content_id_list = $matches[1];
+    preg_match_all( '%<(?<tag>.+?) id="(?<id>.*?)".*(?:>(?<title>.*)</\1|/>)%', $this->content, $matches );
+    
+    foreach ( array_keys( $matches['tag'] ) as $index ) {
+      $this->content_id_list[ $matches['id'][$index] ] = ( empty( $matches['title'][$index] ) ? $matches['id'][$index] . ' (' . $matches['tag'][$index] . ')' : $matches['title'][$index] );
+    }
+  }
+  
+  /**
+   * adds a new ID to the list
+   * 
+   * @param string  $title
+   * @param string $slug the new id
+   */
+  private function add_id_to_list( $title, $slug )
+  {
+    $this->content_id_list[$slug] = $title;
+  }
+  
+  /**
+   * updates the transient
+   * 
+   */
+  private function update_transient()
+  {
+    $all_post_id_lists = get_transient(self::id_list_transient);
+    $all_post_id_lists[ $this->post_id ] = $this->content_id_list;
+    set_transient(self::id_list_transient, $all_post_id_lists, DAY_IN_SECONDS);
   }
 
 }
