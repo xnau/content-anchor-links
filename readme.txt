@@ -23,7 +23,7 @@ To create an anchor link, add the desired link text, select it and click the "ad
 
 If you want a link from another page to jump to a heading, you can add the anchor link (begins with a "#") to the regular page link and when that link is clicked on the user will be taken to that heading on the new page.
 
-For example, let's say you have a page at `https://your-website.co/making-a-link-list` that explains how to make a link list, and on that page is a tutorial with the heading "Tutorial" If you look at the HTML for that page, you'll see that the heading has an "id", like this" `<h2 id="tutorial">Tutorial</h2>` On your other page you can link directly to that heading with an URL like this: `https://your-website.com/making-a-link-list#tutorial`
+For example, let's say you have a page at `https://xnau.com/content-anchor-links/` that explains how to make a link list, and on that page is a tutorial with the heading "A Tutorial" If you look at the HTML for that page, you'll see that the heading has an "id", like this: `<h2 id="a-tutorial">A Tutorial</h2>` You can create a link that goes directly to that heading with a URL like this: `https://xnau.com/content-anchor-links/#a-tutorial`
 
 == Installation ==
 
@@ -43,9 +43,27 @@ For example, let's say you have a page at `https://your-website.co/making-a-link
 
 == Frequently Asked Questions ==
 
-= I don't see the anchor links in the linker =
+= What is the "linker"? =
 
-First, be sure there are headings in your content. The plugin creates links on Heading 2 and Heading 3 
+The "linker" is the pop-up that appears when you select some text and click on the "add link" icon in the WordPress visual editor (or the "link" button in the text editor). When you begin typing in the linker, it tries to find content that matches the letters you typed. The Content Anchor Links plugin adds anchors from the current page or post to the list of suggestions that appears when the search happens. 
+
+= I don't see the anchor links in the linker. =
+
+First, be sure there are headings in your content. The plugin adds an ID attribute to all Heading 2 and Heading 3 elements in the content. Once you have the headings in place, save the page or post (either as a draft or as published content) which saves the ID attributes where the linker can find them. Now, select the text you want to add an anchor link to, then type in the first couple of letters of the heading you want the link to jump to. When the results come in, you'll see the anchor links at the bottom of the list. Select your anchor, and commit the link.
+
+= Can I change the ID that the plugin put on one of my headings? =
+
+Yes, as long as the ID is valid (see below) you can change the ID to anything you want. The plugin won't change any IDs that are already present.
+
+= Can I create anchor links to images or other content? =
+
+Yes, even though the plugin only adds IDs to headings, you can add an ID attribute to things like images, bullet lists, pullquotes, paragraphs, ...anything. Just add an ID attribute to the element and once the content is saved, the ID will show up in the linker as an anchor you can link to.  **Important:** the ID attribute value must be unique to the page it's on. If there is another element with the same ID, the anchor link won't work and you will possibly break other things as well.
+
+= I added an ID attribute to something on the page, but it doesn't work. =
+
+ID attributes have certain requirements in order to be valid and work as anchors. First, an ID attribute should start with a letter, and only contain letters, numbers, and '-','_','.'. That's it, no spaces, no other punctuation or symbols.
+
+**Very important:** the ID must be unique. Having two of the same IDs on a page (this includes everything on the page, like menus, footers, etc.) will cause the ID to be invalid and can cause problems with page functionality, specifically javascript will often not work if a page has any duplicate IDs.
 
 == Changelog ==
 
