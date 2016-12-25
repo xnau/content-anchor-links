@@ -2,13 +2,12 @@
 
 /*
  * Plugin Name: Content Anchor Links
- * Version: 1.0
  * Description: Easily add content anchors to your pages and posts
  * Author: Roland Barker, xnau webdesign
  * Version: 1.1
  * Author URI: https://xnau.com
  * License: GPL3
- * Text Domain: participants-database
+ * Text Domain: content-anchor-links
  * Domain Path: /languages
  * 
  */
