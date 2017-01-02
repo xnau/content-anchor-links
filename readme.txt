@@ -67,10 +67,16 @@ ID attributes have certain requirements in order to be valid and work as anchors
 
 == Changelog ==
 
-= 1.0 =
-initial public release
+= 1.2 =
+Headings IDs: better handling of nested tags #2
 
 = 1.1 =
 improved linker UI functionality
 
+= 1.0 =
+initial public release
+
+
 == Upgrade Notice ==
+
+1.2 is a bugfix release for all users
