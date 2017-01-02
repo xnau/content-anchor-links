@@ -73,7 +73,7 @@ class xnau_WP_Headings_IDs {
   private function add_anchors_to_headings()
   {
     // pattern to select all headings without ids
-    $pattern = '%<(?<tag>h[2-3])(?!.+id=".+)(?<atts>[^>]*)>(?<content>.+)</\1>%';
+    $pattern = '%<(?<tag>h[2-3])(?!.+id=".+)(?<atts>[^>]*)>(?<content>.+)</\1>%s';
 
     // now run the pattern and callback function on content
     // and process it through a function that replaces the title with an id 
@@ -93,11 +93,10 @@ class xnau_WP_Headings_IDs {
    */
   public function place_ids( $matches )
   {
-    $title = strip_tags( $matches['content'] );
-    $slug = $this->unique_id( $this->make_slug( $title ) );
+    $slug = $this->unique_id( $this->make_slug( $matches['content'] ) );
     
     // add the new slug to the id list
-    $this->add_id_to_list( $title, $slug );
+    $this->add_id_to_list( strip_tags( $matches['content'] ), $slug );
     
     return '<' . $matches['tag'] . ' id="' . $slug . '" ' . $matches['atts'] . '>' . $matches['content'] . '</' . $matches['tag'] . '>';
   }
@@ -105,16 +104,61 @@ class xnau_WP_Headings_IDs {
   /**
    * makes a slug out of a title
    * 
-   * @param string $title the title or content of the element
+   * @param string $content the title or content of the element
    * 
    * @return string the derived slug
    */
-  private function make_slug( $title )
+  private function make_slug( $content )
   {
+    $title = $this->prepare_slug($content);
+    
     if ( empty( $title ) ) {
       $title = uniqid('anchor-');
     }
-    return substr( sanitize_title_with_dashes( $title ), 0, self::id_length );
+    /**
+     * @since 1.3
+     * 
+     * skipped using the WP func sanitize_title_with_dashes becsause it encodes 
+     * utf-8 characrers needlessly
+     */
+    //return substr( sanitize_title_with_dashes( $title ), 0, self::id_length );
+    return substr( $title, 0, self::id_length );
+  }
+  
+  /**
+   * prepares a slug string
+   * 
+   * @param string  the raw heading content
+   * 
+   * @return string prepared for use as an ID attribute
+   */
+  private function prepare_slug( $content )
+  {
+    /**
+     * @filter content-anchor-links_id_string
+     * 
+     * allows for an alternate id string prep method
+     */
+    if ( has_filter( 'content-anchor-links_id_string' ) ) {
+      $title = apply_filters('content-anchor-links_id_string', $content );
+    } else {
+      /*
+       * string preparation sequence:
+       * 
+       * 1. URL-encoded characters are decoded
+       * 2. tags are stripped out
+       * 3. string is converted to utf-8
+       * 4. all whitespace is replaced with hyphens
+       * 5. strip out all non-printing characters
+       * 6. remove any leading numerals for HTML4 comptatibility
+       * 
+       */
+      $title = preg_replace( 
+              array( '/\s/', '/[\x00-\x08\x0B\x0C\x0E-\x1F]/u', '/^[0-9]*/' ), 
+              array( '-', '', '' ), 
+              mb_convert_encoding( strip_tags( urldecode( $content ) ), 'UTF-8', 'UTF-8') );
+    }
+    return $title;
   }
 
   /**
