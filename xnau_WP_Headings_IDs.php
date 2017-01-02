@@ -8,7 +8,7 @@
  * @author     Roland Barker <webdesign@xnau.com>
  * @copyright  2016  xnau webdesign
  * @license    GPL3
- * @version    0.2
+ * @version    0.3
  * @link       https://xnau.com/content-anchor-links/
  * @depends    
  */
@@ -73,7 +73,7 @@ class xnau_WP_Headings_IDs {
   private function add_anchors_to_headings()
   {
     // pattern to select all headings without ids
-    $pattern = '%<h([2-3])(?!.+id=".+)(?<atts>.*)>(?<heading>.*?)</h\1>%';
+    $pattern = '%<(?<tag>h[2-3])(?!.+id=".+)(?<atts>[^>]*)>(?<content>.+)</\1>%';
 
     // now run the pattern and callback function on content
     // and process it through a function that replaces the title with an id 
@@ -93,13 +93,13 @@ class xnau_WP_Headings_IDs {
    */
   public function place_ids( $matches )
   {
-    $title = $matches['heading'];
+    $title = strip_tags( $matches['content'] );
     $slug = $this->unique_id( $this->make_slug( $title ) );
     
     // add the new slug to the id list
     $this->add_id_to_list( $title, $slug );
     
-    return '<h2 id="' . $slug . '" ' . $matches['atts'] . '>' . $title . '</h2>';
+    return '<' . $matches['tag'] . ' id="' . $slug . '" ' . $matches['atts'] . '>' . $matches['content'] . '</' . $matches['tag'] . '>';
   }
   
   /**
