@@ -1,12 +1,12 @@
 === Content Anchor Links ===
 Contributors: xnau
-Donate link: https://xnau.com/work/wordpress-plugins/#donation-link
+Stable Tag: 1.2
 Tags: anchor
 Requires at least: 4.6.0
-Tested up to: 4.6.1
-Stable Tag: 1.1
+Tested up to: 4.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
+Donate link: https://xnau.com/work/wordpress-plugins/#donation-link
 
 Easily add content anchors to your pages and posts
 
@@ -68,7 +68,7 @@ ID attributes have certain requirements in order to be valid and work as anchors
 == Changelog ==
 
 = 1.2 =
-Headings IDs: better handling of nested tags #2
+headings IDs: better handling of nested tags #2
 
 = 1.1 =
 improved linker UI functionality
