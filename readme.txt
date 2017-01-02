@@ -67,6 +67,10 @@ ID attributes have certain requirements in order to be valid and work as anchors
 
 == Changelog ==
 
+= 1.3 =
+compatibility with utf-characters in headings
+fixed bug with invisible characters, whitespace in headings #3
+
 = 1.2 =
 headings IDs: better handling of nested tags #2
 

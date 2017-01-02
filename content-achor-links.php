@@ -4,7 +4,7 @@
  * Plugin Name: Content Anchor Links
  * Description: Easily add content anchors to your pages and posts
  * Author: Roland Barker, xnau webdesign
- * Version: 1.2
+ * Version: 1.3
  * Author URI: https://xnau.com
  * License: GPL3
  * Text Domain: content-anchor-links
