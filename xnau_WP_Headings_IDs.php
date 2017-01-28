@@ -60,7 +60,6 @@ class xnau_WP_Headings_IDs {
   public static function add_heading_ids( $content, $post_id )
   {
     $headings = new self( $content, $post_id );
-    error_log(__METHOD__.' post: '.$post_id);
     return $headings->add_anchors_to_headings();
   }
 
