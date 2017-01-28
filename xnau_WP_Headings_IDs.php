@@ -8,7 +8,7 @@
  * @author     Roland Barker <webdesign@xnau.com>
  * @copyright  2016  xnau webdesign
  * @license    GPL3
- * @version    0.3
+ * @version    0.4
  * @link       https://xnau.com/content-anchor-links/
  * @depends    
  */
@@ -60,6 +60,7 @@ class xnau_WP_Headings_IDs {
   public static function add_heading_ids( $content, $post_id )
   {
     $headings = new self( $content, $post_id );
+    error_log(__METHOD__.' post: '.$post_id);
     return $headings->add_anchors_to_headings();
   }
 
@@ -73,7 +74,7 @@ class xnau_WP_Headings_IDs {
   private function add_anchors_to_headings()
   {
     // pattern to select all headings without ids
-    $pattern = '%<(?<tag>h[2-3])(?!.+id=".+)(?<atts>[^>]*)>(?<content>.+)</\1>%s';
+    $pattern = '%<(?<tag>h[2-3])(?![^>]*id="[^>]*)(?<atts>[^>]*)>(?<content>.+?)</\1>%s';
 
     // now run the pattern and callback function on content
     // and process it through a function that replaces the title with an id 
