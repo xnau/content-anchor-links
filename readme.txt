@@ -3,7 +3,7 @@ Contributors: xnau
 Stable Tag: 1.2
 Tags: anchor
 Requires at least: 4.6.0
-Tested up to: 4.7
+Tested up to: 4.7.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Donate link: https://xnau.com/work/wordpress-plugins/#donation-link
@@ -67,6 +67,9 @@ ID attributes have certain requirements in order to be valid and work as anchors
 
 == Changelog ==
 
+= 1.4 =
+improved the heading detection
+
 = 1.3 =
 compatibility with utf-characters in headings
 fixed bug with invisible characters, whitespace in headings #3
@@ -83,4 +86,4 @@ initial public release
 
 == Upgrade Notice ==
 
-1.2 is a bugfix release for all users
+1.4 is a bugfix release for all users
