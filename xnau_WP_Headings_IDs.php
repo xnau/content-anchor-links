@@ -8,7 +8,7 @@
  * @author     Roland Barker <webdesign@xnau.com>
  * @copyright  2016  xnau webdesign
  * @license    GPL3
- * @version    0.4
+ * @version    0.5
  * @link       https://xnau.com/content-anchor-links/
  * @depends    
  */
@@ -17,7 +17,7 @@ class xnau_WP_Headings_IDs {
   /**
    * @var array of existing IDs
    */
-  private $content_id_list;
+  private $content_id_list = array();
 
   /**
    * @var string the current content
