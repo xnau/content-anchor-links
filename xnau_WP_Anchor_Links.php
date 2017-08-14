@@ -8,7 +8,7 @@
  * @author     Roland Barker <webdesign@xnau.com>
  * @copyright  2016  xnau webdesign
  * @license    GPL3
- * @version    0.2
+ * @version    0.3
  * @link       http://xnau.com/wordpress-plugins/
  * @depends    
  */
@@ -67,7 +67,7 @@ class xnau_WP_Anchor_Links {
   private function get_post_ids()
   {
     $all_post_ids = get_transient( xnau_WP_Headings_IDs::id_list_transient );
-    $this->content_id_list = $all_post_ids[$this->post_id];
+    $this->content_id_list = is_array( $all_post_ids ) ? $all_post_ids[$this->post_id] : array();
   }
 
   /**
