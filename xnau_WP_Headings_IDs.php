@@ -8,7 +8,7 @@
  * @author     Roland Barker <webdesign@xnau.com>
  * @copyright  2016  xnau webdesign
  * @license    GPL3
- * @version    0.5
+ * @version    0.6
  * @link       https://xnau.com/content-anchor-links/
  * @depends    
  */
@@ -73,7 +73,7 @@ class xnau_WP_Headings_IDs {
   private function add_anchors_to_headings()
   {
     // pattern to select all headings without ids
-    $pattern = '%<(?<tag>h[2-3])(?![^>]*id="[^>]*)(?<atts>[^>]*)>(?<content>.+?)</\1>%s';
+    $pattern = apply_filters( 'content-anchor-links-headings_regex', '%<(?<tag>h[2-3])(?![^>]*id="[^>]*)(?<atts>[^>]*)>(?<content>.+?)</\1>%s' );
 
     // now run the pattern and callback function on content
     // and process it through a function that replaces the title with an id 
@@ -96,9 +96,20 @@ class xnau_WP_Headings_IDs {
     $slug = $this->unique_id( $this->make_slug( $matches['content'] ) );
     
     // add the new slug to the id list
-    $this->add_id_to_list( strip_tags( $matches['content'] ), $slug );
+    $this->add_id_to_list( $this->make_title( $matches ), $slug );
     
     return '<' . $matches['tag'] . ' id="' . $slug . '" ' . $matches['atts'] . '>' . $matches['content'] . '</' . $matches['tag'] . '>';
+  }
+  
+  /**
+   * creates an anchor link title
+   * 
+   * @param array $matches the regex matches array
+   * @return string
+   */
+  private function make_title( $matches )
+  {
+    return strip_tags( $matches['content'] ) . ' (' . $matches['tag'] . ')';
   }
   
   /**
@@ -147,16 +158,18 @@ class xnau_WP_Headings_IDs {
        * 
        * 1. URL-encoded characters are decoded
        * 2. tags are stripped out
-       * 3. string is converted to utf-8
-       * 4. all whitespace is replaced with hyphens
-       * 5. strip out all non-printing characters
-       * 6. remove any leading numerals for HTML4 comptatibility
+       * 3. convert to lowercase
+       * 4. string is converted to utf-8
+       * 5. all whitespace is replaced with hyphens
+       * 6. strip out all non-printing characters
+       * 7. remove any leading numerals for HTML4 comptatibility
+       * 8. strip out any punctuation
        * 
        */
       $title = preg_replace( 
-              array( '/\s/', '/[\x00-\x08\x0B\x0C\x0E-\x1F]/u', '/^[0-9]*/' ), 
-              array( '-', '', '' ), 
-              mb_convert_encoding( strip_tags( urldecode( $content ) ), 'UTF-8', 'UTF-8') );
+              array( '/\s/', '/[\x00-\x08\x0B\x0C\x0E-\x1F]/u', '/^[0-9]*/', '/[.,~`!@#$%^&*()+=?]/' ), 
+              array( '-', '', '', '' ), 
+              mb_convert_encoding( strtolower( strip_tags( urldecode( $content ) ) ), 'UTF-8', 'UTF-8') );
     }
     return $title;
   }
