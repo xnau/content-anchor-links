@@ -8,7 +8,7 @@
  * @author     Roland Barker <webdesign@xnau.com>
  * @copyright  2016  xnau webdesign
  * @license    GPL3
- * @version    0.3
+ * @version    0.4
  * @link       http://xnau.com/wordpress-plugins/
  * @depends    
  */
@@ -43,13 +43,13 @@ class xnau_WP_Anchor_Links {
    * @param string  $results
    * @return string
    */
-  public static function get_content_anchors( $results )
+  public static function get_content_anchors( $results, $query )
   {
     $headings = new self();
 
     $anchor_title = __( 'Anchor' );
 
-    foreach ( $headings->content_id_list as $id => $title ) {
+    foreach ( $headings->content_id_list( $query['s'] ) as $id => $title ) {
       $results[] = array(
           'ID' => '',
           'title' => $title,
@@ -73,15 +73,41 @@ class xnau_WP_Anchor_Links {
   /**
    * gets the current post in an admin AJAX call
    * 
-   * @return object
+   * @param int $post_id
+   * @return null
    */
   private function setup_post()
   {
-    $url = parse_url( filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_STRING ) );
+    $url = parse_url( filter_var( $_SERVER['HTTP_REFERER'], FILTER_SANITIZE_URL ) );
     parse_str( $url['query'], $vars );
     $this->post_id = $vars['post'];
     $this->get_post_ids();
-    //$this->post_content = get_post( $this->post_id );
+  }
+  
+  /**
+   * supplies the filtered list of anchor ids
+   * 
+   * @param string  $search term
+   * @return array
+   */
+  private function content_id_list( $search ) {
+    $terms = explode(' ', $search);
+    /*
+     * if there is no search term or there are too many, just provide the whole list
+     */
+    if ( empty( $terms ) || count( $terms ) > 2 ) {
+      return $this->content_id_list;
+    }
+    
+    $return = array();
+    foreach ( $this->content_id_list as $id => $title ) {
+      foreach ( $terms as $term ) {
+        if ( stripos( $id, $term ) !== false ) {
+          $return[$id] = $title;
+        }
+      }
+    }
+    return $return;
   }
 
 }
