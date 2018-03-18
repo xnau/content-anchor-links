@@ -3,7 +3,7 @@ Contributors: xnau
 Stable Tag: 1.2
 Tags: anchor
 Requires at least: 4.6.0
-Tested up to: 4.8.2
+Tested up to: 4.9.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Donate link: https://xnau.com/work/wordpress-plugins/#donation-link
@@ -67,26 +67,31 @@ ID attributes have certain requirements in order to be valid and work as anchors
 
 == Changelog ==
 
+= 1.6 =
+* fixed bug where anchors weren't added to the linker in some cases #8
+* anchors are now filtered by the search term in the linker #10
+* better anchor slug generation for headings with special characters, punctuation, etc. #6
+
 = 1.5 =
-fixed minor bugs
+* fixed minor bugs
 
 = 1.4 =
-improved the heading detection
+* improved the heading detection
 
 = 1.3 =
-compatibility with utf-characters in headings
-fixed bug with invisible characters, whitespace in headings #3
+* compatibility with utf-characters in headings
+* fixed bug with invisible characters, whitespace in headings #3
 
 = 1.2 =
-headings IDs: better handling of nested tags #2
+* headings IDs: better handling of nested tags #2
 
 = 1.1 =
-improved linker UI functionality
+* improved linker UI functionality
 
 = 1.0 =
-initial public release
+* initial public release
 
 
 == Upgrade Notice ==
 
-1.4 is a bugfix release for all users
+1.6 is a bugfix and feature release for all users
