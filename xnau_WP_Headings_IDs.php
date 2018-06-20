@@ -73,7 +73,7 @@ class xnau_WP_Headings_IDs {
   private function add_anchors_to_headings()
   {
     // pattern to select all headings without ids
-    $pattern = apply_filters( 'content-anchor-links-headings_regex', '%<(?<tag>h[2-3])(?![^>]*id="[^>]*)(?<atts>[^>]*)>(?<content>.+?)</\1>%s' );
+    $pattern = apply_filters( 'content-anchor-links-headings_regex', '%<(?<tag>h[2-6])(?![^>]*id="[^>]*)(?<atts>[^>]*)>(?<content>.+?)</\1>%s' );
 
     // now run the pattern and callback function on content
     // and process it through a function that replaces the title with an id 
