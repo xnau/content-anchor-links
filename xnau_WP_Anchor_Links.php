@@ -8,7 +8,7 @@
  * @author     Roland Barker <webdesign@xnau.com>
  * @copyright  2016  xnau webdesign
  * @license    GPL3
- * @version    0.4
+ * @version    0.5
  * @link       http://xnau.com/wordpress-plugins/
  * @depends    
  */
@@ -45,6 +45,10 @@ class xnau_WP_Anchor_Links {
    */
   public static function get_content_anchors( $results, $query )
   {
+    if ( ! isset( $query['s'] ) ) {
+      return $results;
+    }
+    
     $headings = new self();
 
     $anchor_title = __( 'Anchor' );
