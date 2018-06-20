@@ -1,9 +1,9 @@
 === Content Anchor Links ===
 Contributors: xnau
-Stable Tag: 1.2
+Stable Tag: 1.6.1
 Tags: anchor
 Requires at least: 4.6.0
-Tested up to: 4.9.4
+Tested up to: 4.9.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Donate link: https://xnau.com/work/wordpress-plugins/#donation-link
@@ -63,9 +63,14 @@ Yes, even though the plugin only adds IDs to headings, you can add an ID attribu
 
 ID attributes have certain requirements in order to be valid and work as anchors. First, an ID attribute should start with a letter, and only contain letters, numbers, and '-','_','.'. That's it, no spaces, no other punctuation or symbols.
 
-**Very important:** the ID must be unique. Having two of the same IDs on a page (this includes everything on the page, like menus, footers, etc.) will cause the ID to be invalid and can cause problems with page functionality, specifically javascript will often not work if a page has any duplicate IDs.
+**Very important:** the ID must be unique. Having two of the same IDs on a page (this includes everything on the page, like menus, footers, etc.) will cause the ID to be invalid and can cause problems with page functionality, specifically javascript will often not work if a page has any duplicate IDs. Also, the HTML won't validate.
 
 == Changelog ==
+
+= 1.6.1 =
+* id attribute now added to all headings h2 through h6
+* tag name now shown in linker for clarity #11
+* fixed error log warning message with empty query #12
 
 = 1.6 =
 * fixed bug where anchors weren't added to the linker in some cases #8
