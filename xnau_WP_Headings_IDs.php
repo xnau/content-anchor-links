@@ -48,6 +48,13 @@ class xnau_WP_Headings_IDs {
     $this->content = $content;
     $this->post_id = $post_id;
     $this->element_id_list();
+    
+    // add fallback id generation if mb_string not available
+    if ( !function_exists( 'mb_convert_encoding' ) ) {
+      add_filter( 'content-anchor-links_id_string', function ( $string ) {
+        return sanitize_title_with_dashes( $string, null, 'save' );
+      });
+    }
   }
 
   /**
@@ -94,7 +101,7 @@ class xnau_WP_Headings_IDs {
    */
   public function place_ids( $matches )
   {
-    $slug = $this->unique_id( $this->make_slug( $matches['content'] ) );
+    $slug = esc_attr( $this->unique_id( $this->make_slug( $matches['content'] ) ) );
     
     // add the new slug to the id list
     $this->add_id_to_list( $this->make_title( $matches ), $slug );
