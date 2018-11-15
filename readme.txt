@@ -67,6 +67,10 @@ ID attributes have certain requirements in order to be valid and work as anchors
 
 == Changelog ==
 
+= 1.6.2 =
+* now supports ACF wysiwyg fields #15
+* add fallback method if mb_string php module is unavailable #13
+
 = 1.6.1 =
 * id attribute now added to all headings h2 through h6
 * tag name now shown in linker for clarity #11
