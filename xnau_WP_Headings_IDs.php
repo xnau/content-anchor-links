@@ -8,7 +8,7 @@
  * @author     Roland Barker <webdesign@xnau.com>
  * @copyright  2016  xnau webdesign
  * @license    GPL3
- * @version    0.6
+ * @version    0.7
  * @link       https://xnau.com/content-anchor-links/
  * @depends    
  */
@@ -59,6 +59,7 @@ class xnau_WP_Headings_IDs {
    */
   public static function add_heading_ids( $content, $post_id )
   {
+//    error_log(__METHOD__.' post id: '.$post_id.' content: '.$content);
     $headings = new self( $content, $post_id );
     return $headings->add_anchors_to_headings();
   }
@@ -73,7 +74,7 @@ class xnau_WP_Headings_IDs {
   private function add_anchors_to_headings()
   {
     // pattern to select all headings without ids
-    $pattern = apply_filters( 'content-anchor-links-headings_regex', '%<(?<tag>h[2-6])(?![^>]*id="[^>]*)(?<atts>[^>]*)>(?<content>.+?)</\1>%s' );
+    $pattern = apply_filters( 'content-anchor-links-headings_regex', '%<(?<tag>h[1-6])(?![^>]*id="[^>]*)(?<atts>[^>]*)>(?<content>.+?)</\1>%s' );
 
     // now run the pattern and callback function on content
     // and process it through a function that replaces the title with an id 
@@ -214,6 +215,8 @@ class xnau_WP_Headings_IDs {
   {
     preg_match_all( '%<(?<tag>.+?) id="(?<id>.*?)".*(?:>(?<title>.*)</\1|/>)%', $this->content, $matches );
     
+//    error_log(__METHOD__.' matches: '.print_r($matches,1));
+    
     foreach ( array_keys( $matches['tag'] ) as $index ) {
       $this->content_id_list[ $matches['id'][$index] ] = ( empty( $matches['title'][$index] ) ? $matches['id'][$index] . ' (' . $matches['tag'][$index] . ')' : $matches['title'][$index] );
     }
@@ -237,7 +240,15 @@ class xnau_WP_Headings_IDs {
   private function update_transient()
   {
     $all_post_id_lists = get_transient(self::id_list_transient);
-    $all_post_id_lists[ $this->post_id ] = $this->content_id_list;
+    
+    if ( isset( $all_post_id_lists[ $this->post_id ] ) && is_array( $all_post_id_lists[ $this->post_id ] ) ) {
+      $all_post_id_lists[ $this->post_id ] += $this->content_id_list;
+    } else {
+      $all_post_id_lists[ $this->post_id ] = $this->content_id_list;
+    }
+    
+//    error_log(__METHOD__.' all id lists: '.print_r($all_post_id_lists,1));
+    
     set_transient(self::id_list_transient, $all_post_id_lists, DAY_IN_SECONDS);
   }
 
