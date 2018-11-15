@@ -104,10 +104,12 @@ class xnau_WP_Anchor_Links {
     }
     
     $return = array();
-    foreach ( $this->content_id_list as $id => $title ) {
-      foreach ( $terms as $term ) {
-        if ( stripos( $id, $term ) !== false ) {
-          $return[$id] = $title;
+    if ( is_array( $this->content_id_list ) ) {
+      foreach ( $this->content_id_list as $id => $title ) {
+        foreach ( $terms as $term ) {
+          if ( stripos( $id, $term ) !== false ) {
+            $return[$id] = $title;
+          }
         }
       }
     }
