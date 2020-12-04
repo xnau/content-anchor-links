@@ -3,7 +3,7 @@ Contributors: xnau
 Stable Tag: 1.6.1
 Tags: anchor
 Requires at least: 4.6.0
-Tested up to: 4.9.6
+Tested up to: 5.5.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Donate link: https://xnau.com/work/wordpress-plugins/#donation-link
@@ -66,6 +66,9 @@ ID attributes have certain requirements in order to be valid and work as anchors
 **Very important:** the ID must be unique. Having two of the same IDs on a page (this includes everything on the page, like menus, footers, etc.) will cause the ID to be invalid and can cause problems with page functionality, specifically javascript will often not work if a page has any duplicate IDs. Also, the HTML won't validate.
 
 == Changelog ==
+
+= 1.6.3 =
+* compatibility update
 
 = 1.6.2 =
 * now supports ACF wysiwyg fields #15
